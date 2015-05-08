@@ -1,0 +1,42 @@
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+<title>PITSA</title>
+</head>
+
+<body>
+<h1>Pull Request Interactive Test Screenshot Approver</h1>
+
+{{images}}
+
+<h1>Are changes</h1>
+<a href="javascript:;" onclick="allow()" style="color: green; font-size: 24px;">GOOD?</a>
+<a href="javascript:;" onclick="deny()" style="color: red; font-size: 24px; padding: 10px;">BAD?</a>
+<script type="text/javascript">
+  function allow() {
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status >= 200 && xmlhttp.status < 300) {
+        document.body.innerHTML = '<span style="color: green; font-size: 96px; padding: 10px;">GOOD</span>';
+      }
+    }
+    xmlhttp.open("GET","{{allow_url}}");
+    xmlhttp.send();
+  }
+
+  function deny() {
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState==4 && xmlhttp.status >= 200 && xmlhttp.status < 300) {
+        document.body.innerHTML = '<span style="color: RED; font-size: 96px; padding: 10px;">BAD</span>';
+      }
+    }
+    xmlhttp.open("GET","{{deny_url}}");
+    xmlhttp.send();
+  }
+</script>
+</body>
+</html>

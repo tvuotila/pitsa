@@ -1,0 +1,51 @@
+{
+  "name": "pitsa",
+  "version": "0.0.1",
+  "description": "Visual regression testing for Protractor and CircleCI",
+  "main": "pitsa.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tvuotila/pitsa.git"
+  },
+  "keywords": [
+    "visual",
+    "regression",
+    "testing",
+    "protractor",
+    "circleci"
+  ],
+  "author": {
+    "name": "Tero Vuotila",
+    "email": "tero.vuotila@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Adarsh Krishnan"
+    }
+  ],
+  "bin": {
+    "pitsa": "./bin/pitsa.js"
+  },
+  "preferGlobal": true,
+  "bugs": {
+    "url": "https://github.com/tvuotila/pitsa/issues"
+  },
+  "homepage": "https://github.com/tvuotila/pitsa",
+  "dependencies": {
+    "archiver": "0.14.3",
+    "async": "^0.9.0",
+    "aws-sdk": "^2.1.26",
+    "debug": "^2.2.0",
+    "github": "^0.2.4",
+    "image-size": "^0.3.5",
+    "request": "^2.55.0",
+    "rimraf": "^2.3.3",
+    "tar": "^2.1.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.3.1"
+  }
+}
