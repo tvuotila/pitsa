@@ -6,6 +6,11 @@ Visual regression testing for Protractor (or Selenium) and CircleCI (or Travis C
 npm install pitsa
 ```
 
+
+## Functionality
+Pitsa takes screenshots and compares them to pull screenshots from reguest target branch. If screenhots differ, user is asked to approve them manually. GitHub status is set indicating that manual review is needed. ![pending status](/examples/pending.png) Pitsa creates [a webpage](examples/screenshot_diffs/VERIFY.html) containing images with changes colored red. User can mark pull request either approved ![approved status](/examples/approved.png) or disapproved. ![disapproved status](/examples/disapproved.png) Approval or dissapproval is marked straight to Github pull request. Screenshot status is separate from test results in order to differentiate between programming error and visual error.
+
+
 ## Usage
 1. Set required environment variables:
 	- GITHUB_OAUTH_TOKEN
