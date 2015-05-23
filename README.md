@@ -8,7 +8,7 @@ npm install pitsa
 
 
 ## Functionality
-Pitsa takes screenshots and compares them to pull screenshots from reguest target branch. If screenhots differ, user is asked to approve them manually. GitHub status is set indicating that manual review is needed. ![pending status](/examples/pending.png) Pitsa creates [a webpage](examples/screenshot_diffs/VERIFY.html) containing images with changes colored red. User can mark pull request either approved ![approved status](/examples/approved.png) or disapproved. ![disapproved status](/examples/disapproved.png) Approval or dissapproval is marked straight to Github pull request. Screenshot status is separate from test results in order to differentiate between programming error and visual error.
+Pitsa takes screenshots and compares them to pull screenshots from reguest target branch. If screenhots differ, user is asked to approve them manually. GitHub status is set indicating that manual review is needed. ![pending status](/examples/pending.png) Pitsa creates [a webpage](examples/screenshot_diffs/VERIFY.html) containing images with changes colored red. User can mark pull request either approved ![approved status](/examples/approved.png) or disapproved. ![disapproved status](/examples/disapproved.png) Approval or dissapproval is marked straight to Github pull request. Screenshot comparison status is separate from test results in order to differentiate between programming error and visual error.
 
 
 ## Usage
@@ -33,8 +33,9 @@ Pitsa takes screenshots and compares them to pull screenshots from reguest targe
 	  pitsa.screenshot();
 	});
 	```
+	or save images you want to compare to screenshot directory (default `screenshots`).
 
-3. Execute Pitsa after your tests and save screenshots, for example by adding following to your circle.yml:
+3. Execute Pitsa after your tests. Remember to save build artifacts. You can for example add following to circle.yml:
 	```
 	test:
 	  post:
@@ -55,7 +56,17 @@ Pitsa takes screenshots and compares them to pull screenshots from reguest targe
 
 
 ## About Pitsa server
-We need to save your GitHub token and information about your pull request securely so that VERIFY.html doesn't contain any sensitive information. Pitsa server is for this reason. Server responds with secure 150 byte long random hash for marking screenshot changes either approved or denied. There is no way to retrieve your information even with the secure hash. We will use GitHub token only to update pull request status. Data is deleted after 30 days (or when our Heroku PostgreSQL space runs out. Server deletes oldest entries when space is getting low to make space.)
+We need to save your GitHub token and information about your pull request securely so that VERIFY.html doesn't contain any sensitive information. Pitsa server is for this reason. Server responds with secure 150 byte long random hash for marking screenshot changes either approved or denied. There is no way to retrieve your information even with the secure hash. We will use GitHub token only to update pull request status. Data is deleted after 30 days or when our Heroku PostgreSQL space runs out. Server deletes oldest entries when space is getting low to make more space. Example of data sent to the server:
+```
+{
+  "github_token": "5631401ae8a9140997be8f65d7f979ceefa313c7",
+  "commit_hash": "7599a900e7a598f6bd4f1990fb1214137e643aa3",
+  "repository": "awesome-website",
+  "owner": "tvuotila",
+  "allow_description": "Screenshot changes are approved.",
+  "deny_description": "Please fix the screenshot changes."
+}
+```
 
 ## Optional enviroment variables:
 
