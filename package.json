@@ -1,6 +1,6 @@
 {
   "name": "pitsa",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Visual regression testing for Protractor and CircleCI",
   "main": "pitsa.js",
   "scripts": {
@@ -48,7 +48,7 @@
   "devDependencies": {
     "jasmine": "^2.3.1"
   },
-  "engines" : {
-    "node" : ">=0.11"
+  "engines": {
+    "node": ">=0.11"
   }
 }
