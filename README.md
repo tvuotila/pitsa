@@ -1,4 +1,4 @@
-# Pitsa ![Build Status Images](https://travis-ci.org/tvuotila/pitsa.svg)
+# Pitsa ![Build Status Images](https://travis-ci.org/tvuotila/pitsa.svg) [![codecov.io](http://codecov.io/github/tvuotila/pitsa/coverage.svg?branch=master)](http://codecov.io/github/tvuotila/pitsa?branch=master)
 Visual regression testing for Protractor (or Selenium) and CircleCI (or Travis CI) using Amazon S3. __Travis CI support is untested.__
 
 ## Installation

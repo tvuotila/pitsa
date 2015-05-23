@@ -5,3 +5,7 @@ node_js:
   - "node"
   - "stable"
   - "iojs"
+before_install:
+  npm install codecov.io istanbul -g
+script:
+  istanbul cover ./node_modules/.bin/jasmine && cat ./coverage/lcov.info | codecov
