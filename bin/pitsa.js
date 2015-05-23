@@ -295,7 +295,7 @@ var pitsa = module.exports = {
             pitsa.debug('Removed comparison image: %s', diff_filename);
             return cb();
           });
-        } else if (isNaN(new Number(stderr))) {
+        } else if (isNaN(stderr)) {
           throw new Error(stderr);
         } else {
           pitsa.debug('Images had differences.');
