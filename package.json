@@ -44,5 +44,8 @@
     "request": "^2.55.0",
     "rimraf": "^2.3.3",
     "tar": "^2.1.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.3.1"
   }
 }
