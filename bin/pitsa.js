@@ -312,20 +312,22 @@ var pitsa = module.exports = {
   resizeFiles: function resizeFiles (old_filename, new_filename, cb) {
     pitsa.debug('Find dimensions of images.');
     var old_dimensions = pitsa.sizeOf(old_filename);
-    pitsa.debug('Old image dimensions:', old_dimensions);
+    pitsa.debug('Old image dimensions: %s', old_dimensions);
     var new_dimensions = pitsa.sizeOf(new_filename);
-    pitsa.debug('New image dimensions:', new_dimensions);
-    var max_width = pitsa.max(old_dimensions.width, new_dimensions.width);
-    var max_height = pitsa.max(old_dimensions.height, new_dimensions.height);
+    pitsa.debug('New image dimensions: %s', new_dimensions);
+    var max_dimensions = {
+      width: pitsa.max(old_dimensions.width, new_dimensions.width),
+      height: pitsa.max(old_dimensions.height, new_dimensions.height)
+    };
     return pitsa.async.parallel({
-      new_filename: pitsa.async.apply(pitsa.resizeFile, old_filename, old_dimensions, max_width, max_height),
-      old_filename: pitsa.async.apply(pitsa.resizeFile, new_filename, new_dimensions, max_width, max_height)
+      new_filename: pitsa.async.apply(pitsa.resizeFile, new_filename, new_dimensions, max_dimensions),
+      old_filename: pitsa.async.apply(pitsa.resizeFile, old_filename, old_dimensions, max_dimensions)
     }, cb);
   },
 
-  resizeFile: function (filename, dimensions, max_width, max_height, cb) {
-    pitsa.debug('Resizing', filename);
-    if (dimensions.width === max_width && dimensions.height == max_height) {
+  resizeFile: function resizeFile (filename, dimensions, max_dimensions, cb) {
+    pitsa.debug('Resizing "%s"', filename);
+    if (dimensions.width === max_dimensions.width && dimensions.height == max_dimensions.height) {
       pitsa.debug('Image is of right size. Skipping...');
       cb(null, filename);
     } else {
