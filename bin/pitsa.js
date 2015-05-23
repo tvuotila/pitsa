@@ -400,7 +400,7 @@ var pitsa = module.exports = {
   },
 
   createImageTags: function createImageTags (filenames, cb) {
-    pitsa.debug('Create image tags from filenames:', filenames);
+    pitsa.debug('Create image tags from filenames: %s', filenames);
     var images = [];
     filenames.forEach(function create_image_tag (file) {
       if (pitsa.path.extname(file) === '.png') {
