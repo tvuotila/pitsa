@@ -231,7 +231,8 @@ var pitsa = module.exports = {
     });
   },
 
-  makeScreenshotDiffDirectory: function (values, cb) {
+  makeScreenshotDiffDirectory: function makeScreenshotDiffDirectory () {
+    var cb = arguments[arguments.length - 1];
     pitsa.debug('Create directory for screenshot comparison results.');
     pitsa.fs.mkdir(
       pitsa.env('SCREENSHOT_DIFF_DIR'),
