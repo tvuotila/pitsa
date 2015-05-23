@@ -13,7 +13,7 @@ var pitsa = module.exports = {
   sizeOf: require('image-size'),
   request: require('request'),
   rmdir: require('rimraf'),
-  skip: {},
+  skip: {name: 'skip'},
 
 
   TEMPLATE: function(cb) {
