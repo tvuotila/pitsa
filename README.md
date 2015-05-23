@@ -1,4 +1,4 @@
-# Pitsa
+# Pitsa ![Build Status Images](https://travis-ci.org/tvuotila/pitsa.svg)
 Visual regression testing for Protractor (or Selenium) and CircleCI (or Travis CI) using Amazon S3. __Travis CI support is untested.__
 
 ## Installation
