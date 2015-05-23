@@ -16,7 +16,7 @@ var pitsa = module.exports = {
   skip: {name: 'skip'},
 
 
-  TEMPLATE: function(cb) {
+  TEMPLATE: function TEMPLATE (cb) {
     pitsa.debug('Reading HTML template.');
     pitsa.fs.readFile(
       pitsa.path.join(__dirname, '../lib/verify_template.html'),
@@ -25,13 +25,13 @@ var pitsa = module.exports = {
   },
 
   // Helpers start //
-  last: function (array) {
+  last: function last (array) {
     pitsa.debug('Give last item of array: %s', array);
     return array[array.length - 1];
   },
 
-  exists: function (path, cb) {
-    pitsa.fs.open(path, 'r', function (err, fd) {
+  exists: function exists (path, cb) {
+    pitsa.fs.open(path, 'r', function exists_callback (err, fd) {
       if (err) {
         pitsa.debug('File does not exist: %s', path);
         cb(err);
@@ -42,7 +42,7 @@ var pitsa = module.exports = {
     });
   },
 
-  max: function(first, second) {
+  max: function max (first, second) {
     pitsa.debug('Return maximum of %s and %s', first, second);
     if (second > first) {
       return second;
@@ -50,21 +50,24 @@ var pitsa = module.exports = {
     return first;
   },
 
-  addPostfix: function(filename, postfix) {
+  addPostfix: function addPostfix (filename, postfix) {
     pitsa.debug('Add postfix "%s" to file "%s".', postfix, filename);
-    var fileparts = filename.split('.');
+    var fileparts = filename.split(/([^:\\/]*?)(?:\.([^ :\\/.]*))?$/);
+    fileparts.pop();
     var ext = fileparts.pop();
     var last_part = fileparts.pop();
-    last_part += last_part + postfix;
+    last_part += postfix;
     fileparts.push(last_part);
-    fileparts.push(ext);
-    var path = fileparts.join('.');
+    if(ext){
+      fileparts.push('.' + ext);
+    }
+    var path = fileparts.join('');
     pitsa.debug('Postfixed file %s', path);
     return path;
   },
   // Helpers end //
 
-  env: function (name) {
+  env: function env (name) {
     var value;
     pitsa.debug('Searching enviroment variable: %s', name);
     if (process.env[name] !== undefined) {
@@ -78,7 +81,7 @@ var pitsa = module.exports = {
     return value;
   },
 
-  defaultValue: function (name) {
+  defaultValue: function defaultValue (name) {
     switch (name) {
     case 'SCREENSHOT_DIR':
       return 'screenshots';
@@ -121,7 +124,7 @@ var pitsa = module.exports = {
     }
   },
 
-  github: function() {
+  github: function github () {
     pitsa.debug('Retrieving GitHub API.');
     if (pitsa._github === undefined) {
       pitsa.debug('GitHub API not created. Creating...');
@@ -145,7 +148,7 @@ var pitsa = module.exports = {
     return pitsa._github;
   },
 
-  getPullRequestNumber: function (cb) {
+  getPullRequestNumber: function getPullRequestNumber (cb) {
     var repo_url, pr_number;
     pitsa.debug('Downloading previous screenshots.');
     repo_url = pitsa.env('PULL_REQUEST_URL');
@@ -162,7 +165,7 @@ var pitsa = module.exports = {
     return cb(pitsa.skip);
   },
 
-  fetchPR: function (pr_number, cb) {
+  fetchPR: function fetchPR (pr_number, cb) {
     pitsa.debug('Fetching PR: %s', pr_number);
     return pitsa.github().pullRequests.get(
       {
@@ -175,7 +178,7 @@ var pitsa = module.exports = {
     );
   },
 
-  downloadPRFromS3: function (pull_request, cb) {
+  downloadPRFromS3: function downloadPRFromS3 (pull_request, cb) {
     pitsa.debug('Downloading from S3');
     var commit_hash = pull_request.base.sha;
     var s3 = new pitsa.AWS.S3();
@@ -186,7 +189,7 @@ var pitsa = module.exports = {
     );
   },
 
-  extractScreenshots: function (data, cb) {
+  extractScreenshots: function extractScreenshots (data, cb) {
     pitsa.debug('Extracting screenshots.');
     pitsa.async.series(
       [
@@ -218,12 +221,12 @@ var pitsa = module.exports = {
     );
   },
 
-  extractTar: function (data, cb) {
+  extractTar: function extractTar (data, cb) {
     pitsa.debug('Extracting tar.');
     var extrator = pitsa.tar.Extract({path: pitsa.env('WORKING_DIR')});
     extrator.write(data.Body);
     extrator.on('end', cb);
-    extrator.end(function(){
+    extrator.end(function extrator_callback (){
       pitsa.debug('Extracting complete.');
     });
   },
@@ -236,7 +239,7 @@ var pitsa = module.exports = {
     );
   },
 
-  readScreenshotDirectory: function () {
+  readScreenshotDirectory: function readScreenshotDirectory () {
     var cb = arguments[arguments.length - 1];
     pitsa.debug('List screenshot directory contents');
     pitsa.fs.readdir(
@@ -245,12 +248,12 @@ var pitsa = module.exports = {
     );
   },
 
-  doComparison: function (filenames, cb) {
+  doComparison: function doComparison (filenames, cb) {
     pitsa.debug('Compare screenshots');
     pitsa.async.each(filenames, pitsa.comparator, cb);
   },
 
-  comparator: function (filename, cb) {
+  comparator: function comparator (filename, cb) {
     pitsa.debug('Compare screenshot: %s', filename);
     if (pitsa.path.extname(filename) !== '.png') {
       pitsa.debug('Screenshot is not a PNG-image. Skipping...');
@@ -262,7 +265,7 @@ var pitsa = module.exports = {
     pitsa.debug('Path to new image: %s', new_filename);
     var diff_filename = pitsa.path.join(pitsa.env('SCREENSHOT_DIFF_DIR'), filename);
     pitsa.debug('Path to image diff: %s', diff_filename);
-    var file_promise = pitsa.exists(old_filename, function(err){
+    return pitsa.exists(old_filename, function comparator_callback (err){
       if (err){
         return pitsa.copyNewFileToDiff(new_filename, diff_filename, cb);
       }
@@ -270,8 +273,8 @@ var pitsa = module.exports = {
     });
   },
 
-  compareFile: function (old_filename, new_filename, diff_filename, cb) {
-    return pitsa.resizeFiles(old_filename, new_filename, function(err, object){
+  compareFile: function compareFile (old_filename, new_filename, diff_filename, cb) {
+    return pitsa.resizeFiles(old_filename, new_filename, function compare_file_callback (err, object){
       if (err){
         return cb(err);
       }
@@ -284,14 +287,14 @@ var pitsa = module.exports = {
         {stdio: ['ignore', 'ignore', 'pipe']}
       );
       var stderr = '';
-      compare.stderr.on('data', function (data) {
+      compare.stderr.on('data', function compare_on_data (data) {
         stderr += data;
       });
-      compare.on('close', function () {
+      compare.on('close', function compare_on_close () {
         pitsa.debug('Comparison process finished for images: %s %s', old_filename, new_filename);
         if (stderr === 'inf\n') {
           pitsa.debug('Images were identical.');
-          return pitsa.fs.unlink(diff_filename, function () {
+          return pitsa.fs.unlink(diff_filename, function compare_unlink_file () {
             pitsa.debug('Removed comparison image: %s', diff_filename);
             return cb();
           });
@@ -305,7 +308,7 @@ var pitsa = module.exports = {
     });
   },
 
-  resizeFiles: function (old_filename, new_filename, cb) {
+  resizeFiles: function resizeFiles (old_filename, new_filename, cb) {
     pitsa.debug('Find dimensions of images.');
     var old_dimensions = pitsa.sizeOf(old_filename);
     pitsa.debug('Old image dimensions:', old_dimensions);
@@ -329,17 +332,17 @@ var pitsa = module.exports = {
       pitsa.debug('Start resize process.');
       var resize = pitsa.child_process.spawn(
         'convert',
-        [filename, '-extent', max_width + 'x' + max_height, converted_filename],
+        [filename, '-extent', max_dimensions.width + 'x' + max_dimensions.height, converted_filename],
         {stdio: ['ignore', 'ignore', process.stderr]}
       );
-      resize.on('close', function(){
+      resize.on('close', function resize_on_close () {
         pitsa.debug('Resized image:', converted_filename);
         return cb(null, converted_filename);
       });
     }
   },
 
-  copyNewFileToDiff: function (new_filename, diff_filename, cb) {
+  copyNewFileToDiff: function copyNewFileToDiff (new_filename, diff_filename, cb) {
     pitsa.debug('Old image not found. Copying the new one as such.');
     pitsa.fs.rename(
       new_filename,
@@ -348,8 +351,8 @@ var pitsa = module.exports = {
     );
   },
 
-  createTag: function (cb) {
-    pitsa.fs.readdir(pitsa.env('SCREENSHOT_DIFF_DIR'), function(err, files){
+  createTag: function createTag (cb) {
+    pitsa.fs.readdir(pitsa.env('SCREENSHOT_DIFF_DIR'), function create_tag_callback (err, files){
       if(err){
         return cb(err);
       }
@@ -373,7 +376,7 @@ var pitsa = module.exports = {
     });
   },
 
-  readScreenshotDiffDirectory: function () {
+  readScreenshotDiffDirectory: function readScreenshotDiffDirectory () {
     pitsa.debug('Read screenshot comparison directory.');
     var cb = arguments[arguments.length - 1];
     pitsa.fs.readdir(
@@ -383,7 +386,7 @@ var pitsa = module.exports = {
   },
 
 
-  createTemplateAndImageTags: function (filenames, cb) {
+  createTemplateAndImageTags: function createTemplateAndImageTags (filenames, cb) {
     pitsa.debug('Fetch template and image tags.');
     return pitsa.async.parallel(
       {
@@ -393,10 +396,10 @@ var pitsa = module.exports = {
     );
   },
 
-  createImageTags: function (filenames, cb) {
+  createImageTags: function createImageTags (filenames, cb) {
     pitsa.debug('Create image tags from filenames:', filenames);
     var images = [];
-    filenames.forEach(function (file) {
+    filenames.forEach(function create_image_tag (file) {
       if (pitsa.path.extname(file) === '.png') {
         images.push(file + '<br>\n<img src="' + file + '", alt="' + file + '">');
       }
@@ -405,7 +408,7 @@ var pitsa = module.exports = {
     return cb(null, images.join('\n<hr>\n'));
   },
 
-  parseTemplate: function (object, cb) {
+  parseTemplate: function parseTemplate (object, cb) {
     var template = object.template;
     var image_tags = object.image_tags;
     var time_now = new Date().getTime();
@@ -426,7 +429,7 @@ var pitsa = module.exports = {
           'content-type': 'application/json',
       },
       body: github_parameters
-    }, function(error, response, body){
+    }, function pitsa_server_request_callback (error, response, body) {
       pitsa.debug('Received a response from Pitsa server.');
       if (error){
         pitsa.debug('Request errored:', error);
@@ -447,9 +450,9 @@ var pitsa = module.exports = {
     });
   },
 
-  writeToVerifyHtml: function (template, cb) {
+  writeToVerifyHtml: function writeToVerifyHtml (template, cb) {
     pitsa.debug('Write verify html to file.');
-    return pitsa.fs.open(pitsa.env('VERIFY_FILE'), 'w', function(err, fd){
+    return pitsa.fs.open(pitsa.env('VERIFY_FILE'), 'w', function write_verify_html_callback (err, fd){
       if(err){
         pitsa.debug('Opening verify html failed.');
         return cb(err);
@@ -459,7 +462,7 @@ var pitsa = module.exports = {
           pitsa.debug('Writing to verify html failed.');
           return cb(err);
         }
-        pitsa.fs.close(fd, function(err){
+        pitsa.fs.close(fd, function write_verify_html_close_file (err){
           if (err){
             pitsa.debug('Closing verify html failed.');
             return cb(err);
@@ -472,7 +475,7 @@ var pitsa = module.exports = {
     });
   },
 
-  endSkip: function (err, cb) {
+  endSkip: function endSkip (err, cb) {
     if (err === pitsa.skip){
       pitsa.debug('Ending skip.');
       return cb();
@@ -485,7 +488,7 @@ var pitsa = module.exports = {
     return cb(err);
   },
 
-  uploadScreenshots: function (cb) {
+  uploadScreenshots: function uploadScreenshots (cb) {
     pitsa.debug('Create tar from screenshots.');
     var archive = pitsa.archiver.create('tar');
     archive.directory(pitsa.env('SCREENSHOT_DIR'));
@@ -515,8 +518,8 @@ if (require.main === module) {
       pitsa.parseTemplate,
       pitsa.writeToVerifyHtml
     ],
-    function(err){
-      return pitsa.async.series([pitsa.async.apply(pitsa.endSkip, err), pitsa.uploadScreenshots], function(err){
+    function second_execution_stage (err){
+      return pitsa.async.series([pitsa.async.apply(pitsa.endSkip, err), pitsa.uploadScreenshots], function rethrow_error (err){
         if (err){
           throw err;
         }
