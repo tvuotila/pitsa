@@ -435,14 +435,14 @@ var pitsa = module.exports = {
     }, function pitsa_server_request_callback (error, response, body) {
       pitsa.debug('Received a response from Pitsa server.');
       if (error){
-        pitsa.debug('Request errored:', error);
+        pitsa.debug('Request errored: %s', error);
         return cb(error);
       } else if (response.statusCode !== 200){
         pitsa.debug('Request has wrong response code: %s', response.statusCode);
         return cb(new Error('Registering GitHub parameters failed.'));
       }
       var signature = body.signature;
-      pitsa.debug('Got signature:', signature);
+      pitsa.debug('Got signature: %s', signature);
       var allow_url = pitsa.env('PITSA_SERVER_URL') + signature + '/allow';
       var deny_url = pitsa.env('PITSA_SERVER_URL') + signature + '/deny';
       template = String(template)
