@@ -128,7 +128,7 @@ var pitsa = module.exports = {
     pitsa.debug('Retrieving GitHub API.');
     if (pitsa._github === undefined) {
       pitsa.debug('GitHub API not created. Creating...');
-      var github = new pitsa.GitHubApi({
+      var github_api = new pitsa.GitHubApi({
         version: "3.0.0",
         debug: pitsa.env('DEBUG'),
         protocol: 'https',
@@ -138,11 +138,11 @@ var pitsa = module.exports = {
           "user-agent": "Pitsa"
         }
       });
-      github.authenticate({
+      github_api.authenticate({
         type: "oauth",
         token: pitsa.env('GITHUB_OAUTH_TOKEN')
       });
-      pitsa._github = github;
+      pitsa._github = github_api;
       pitsa.debug('GitHub API created.');
     }
     return pitsa._github;
