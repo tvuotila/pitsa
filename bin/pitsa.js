@@ -81,7 +81,7 @@ var pitsa = module.exports = {
     return value;
   },
 
-  functionize: function functionize(value) {
+  lambda: function lambda(value) {
     return function returnValue(){
       return value;
     };
@@ -89,32 +89,32 @@ var pitsa = module.exports = {
 
   defaultValue: function defaultValue (name) {
     CHOICES = {
-      SCREENSHOT_DIR: pitsa.functionize('screenshots'),
-      PULL_REQUEST_URL: pitsa.functionize(process.env.CI_PULL_REQUEST),
-      PULL_REQUEST_NUMBER: pitsa.functionize(process.env.TRAVIS_PULL_REQUEST),
+      SCREENSHOT_DIR: pitsa.lambda('screenshots'),
+      PULL_REQUEST_URL: pitsa.lambda(process.env.CI_PULL_REQUEST),
+      PULL_REQUEST_NUMBER: pitsa.lambda(process.env.TRAVIS_PULL_REQUEST),
       PROJECT_USERNAME: function PROJECT_USERNAME() {
         return pitsa.env('CIRCLE_PROJECT_USERNAME');
       },
       PROJECT_REPONAME: function PROJECT_REPONAME() {
-        return pitsa.functionize(pitsa.env('CIRCLE_PROJECT_REPONAME'));
+        return pitsa.lambda(pitsa.env('CIRCLE_PROJECT_REPONAME'));
       },
-      DEBUG: pitsa.functionize(false),
-      GITHUB_API_HOST: pitsa.functionize('api.github.com'),
-      TEMP_SCREENSHOT_DIR: pitsa.functionize('screenshots_tmp'),
-      WORKING_DIR: pitsa.functionize('.'),
-      OLD_SCREENSHOT_DIR: pitsa.functionize('old_screenshots'),
-      TAG_NAME: pitsa.functionize('pitsa/guard'),
-      PENDING_MESSAGE: pitsa.functionize('Please fix the screenshot changes.'),
-      ALLOW_MESSAGE: pitsa.functionize('Screenshot changes are approved.'),
-      DENY_MESSAGE: pitsa.functionize('Please fix the screenshot changes.'),
+      DEBUG: pitsa.lambda(false),
+      GITHUB_API_HOST: pitsa.lambda('api.github.com'),
+      TEMP_SCREENSHOT_DIR: pitsa.lambda('screenshots_tmp'),
+      WORKING_DIR: pitsa.lambda('.'),
+      OLD_SCREENSHOT_DIR: pitsa.lambda('old_screenshots'),
+      TAG_NAME: pitsa.lambda('pitsa/guard'),
+      PENDING_MESSAGE: pitsa.lambda('Please fix the screenshot changes.'),
+      ALLOW_MESSAGE: pitsa.lambda('Screenshot changes are approved.'),
+      DENY_MESSAGE: pitsa.lambda('Please fix the screenshot changes.'),
       COMMIT_HASH: function COMMIT_HASH () {
         return pitsa.env('CIRCLE_SHA1');
       },
       VERIFY_FILE: function VERIFY_FILE() {
         return pitsa.path.join(pitsa.env('SCREENSHOT_DIFF_DIR'), 'VERIFY.html');
       },
-      SCREENSHOT_DIFF_DIR: pitsa.functionize('screenshot_diffs'),
-      PITSA_SERVER_URL: pitsa.functionize('https://pitsa.herokuapp.com/'),
+      SCREENSHOT_DIFF_DIR: pitsa.lambda('screenshot_diffs'),
+      PITSA_SERVER_URL: pitsa.lambda('https://pitsa.herokuapp.com/'),
     };
     var choice = CHOICES[name];
     if (choice === undefined) {
