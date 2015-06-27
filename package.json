@@ -1,6 +1,6 @@
 {
   "name": "pitsa",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Visual regression testing for Protractor and CircleCI",
   "main": "pitsa.js",
   "scripts": {
