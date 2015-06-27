@@ -57,7 +57,7 @@ Pitsa takes screenshots and compares them to pull screenshots from reguest targe
 
 
 ## About Pitsa server
-We need to save your GitHub token and information about your pull request securely so that VERIFY.html doesn't contain any sensitive information. Pitsa server is for this reason. Server responds with secure 150 byte long random hash for marking screenshot changes either approved or denied. There is no way to retrieve your information even with the secure hash. We will use GitHub token only to update pull request status. Data is deleted after 30 days or when our Heroku PostgreSQL space runs out. Server deletes oldest entries when space is getting low to make more space. Example of data sent to the server:
+We need to save your GitHub token and information about your pull request securely so that VERIFY.html doesn't contain any sensitive information. Pitsa server is for this reason. Server responds with secure 150 byte long random hash. The hash can be used to mark screenshot changes either approved or denied. There is no way to retrieve the token or the information even with the secure hash. We will use the GitHub token only to update pull request status. Data is deleted after 30 days or when our Heroku PostgreSQL space runs out. Server deletes oldest entries when space is getting low. Example of data sent to the server:
 ```
 {
   "github_token": "5631401ae8a9140997be8f65d7f979ceefa313c7",
