@@ -929,10 +929,12 @@ describe('Pitsa', function(){
         pitsa.createImageTags(filenames, function(err, result){
           expect(err).toBeFalsy();
           expect(result).toBe(
-            'image1.png<br>\n' +
+            'image1.png <a href="../screenshots/image1.png">[new]</a> ' +
+            '<a href="../old_screenshots/image1.png">[old]</a><br>\n' +
             '<img src="image1.png", alt="image1.png">\n' +
             '<hr>\n' +
-            'image2.png<br>\n' +
+            'image2.png <a href="../screenshots/image2.png">[new]</a> ' +
+            '<a href="../old_screenshots/image2.png">[old]</a><br>\n' +
             '<img src="image2.png", alt="image2.png">'
           );
           done();

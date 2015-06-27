@@ -400,10 +400,28 @@ var pitsa = module.exports = {
 
   createImageTags: function createImageTags (filenames, cb) {
     pitsa.debug_main('Create image tags from filenames: %s', filenames);
+    function link(path, name) {
+      return ' <a href="' + path + '">' + name + '</a>';
+    }
     var images = [];
     filenames.forEach(function create_image_tag (file) {
       if (pitsa.path.extname(file) === '.png') {
-        images.push(file + '<br>\n<img src="' + file + '", alt="' + file + '">');
+        var diff_image = '<br>\n<img src="' + file + '", alt="' + file + '">';
+        var new_image_link = link(
+          pitsa.path.relative(
+            pitsa.env('SCREENSHOT_DIFF_DIR'),
+            pitsa.path.join(pitsa.env('SCREENSHOT_DIR'), file)
+          ),
+          '[new]'
+        );
+        var old_image_link = link(
+          pitsa.path.relative(
+            pitsa.env('SCREENSHOT_DIFF_DIR'),
+            pitsa.path.join(pitsa.env('OLD_SCREENSHOT_DIR'), file)
+          ),
+          '[old]'
+        );
+        images.push(file + new_image_link + old_image_link + diff_image);
       }
     });
     pitsa.debug_main('Image tags created.');
