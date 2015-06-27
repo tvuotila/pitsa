@@ -81,47 +81,46 @@ var pitsa = module.exports = {
     return value;
   },
 
+  functionize: function functionize(value) {
+    return function returnValue(){
+      return value;
+    };
+  },
+
   defaultValue: function defaultValue (name) {
-    switch (name) {
-    case 'SCREENSHOT_DIR':
-      return 'screenshots';
-    case 'PULL_REQUEST_URL':
-      return process.env.CI_PULL_REQUEST;
-    case 'PULL_REQUEST_NUMBER':
-      return process.env.TRAVIS_PULL_REQUEST;
-    case 'PROJECT_USERNAME':
-      return pitsa.env('CIRCLE_PROJECT_USERNAME');
-    case 'PROJECT_REPONAME':
-      return pitsa.env('CIRCLE_PROJECT_REPONAME');
-    case 'DEBUG':
-      return false;
-    case 'GITHUB_API_HOST':
-      return 'api.github.com';
-    case 'TEMP_SCREENSHOT_DIR':
-      return 'screenshots_tmp';
-    case 'WORKING_DIR':
-      return '.';
-    case 'OLD_SCREENSHOT_DIR':
-      return 'old_screenshots';
-    case 'TAG_NAME':
-      return 'pitsa/guard';
-    case 'PENDING_MESSAGE':
-      return 'Please fix the screenshot changes.';
-    case 'ALLOW_MESSAGE':
-      return 'Screenshot changes are approved.';
-    case 'DENY_MESSAGE':
-      return 'Please fix the screenshot changes.';
-    case 'COMMIT_HASH':
-      return pitsa.env('CIRCLE_SHA1');
-    case 'VERIFY_FILE':
-      return pitsa.path.join(pitsa.env('SCREENSHOT_DIFF_DIR'), 'VERIFY.html');
-    case 'SCREENSHOT_DIFF_DIR':
-      return 'screenshot_diffs';
-    case 'PITSA_SERVER_URL':
-      return 'https://pitsa.herokuapp.com/';
-    default:
+    CHOICES = {
+      SCREENSHOT_DIR: pitsa.functionize('screenshots'),
+      PULL_REQUEST_URL: pitsa.functionize(process.env.CI_PULL_REQUEST),
+      PULL_REQUEST_NUMBER: pitsa.functionize(process.env.TRAVIS_PULL_REQUEST),
+      PROJECT_USERNAME: function PROJECT_USERNAME() {
+        return pitsa.env('CIRCLE_PROJECT_USERNAME');
+      },
+      PROJECT_REPONAME: function PROJECT_REPONAME() {
+        return pitsa.functionize(pitsa.env('CIRCLE_PROJECT_REPONAME'));
+      },
+      DEBUG: pitsa.functionize(false),
+      GITHUB_API_HOST: pitsa.functionize('api.github.com'),
+      TEMP_SCREENSHOT_DIR: pitsa.functionize('screenshots_tmp'),
+      WORKING_DIR: pitsa.functionize('.'),
+      OLD_SCREENSHOT_DIR: pitsa.functionize('old_screenshots'),
+      TAG_NAME: pitsa.functionize('pitsa/guard'),
+      PENDING_MESSAGE: pitsa.functionize('Please fix the screenshot changes.'),
+      ALLOW_MESSAGE: pitsa.functionize('Screenshot changes are approved.'),
+      DENY_MESSAGE: pitsa.functionize('Please fix the screenshot changes.'),
+      COMMIT_HASH: function COMMIT_HASH () {
+        return pitsa.env('CIRCLE_SHA1');
+      },
+      VERIFY_FILE: function VERIFY_FILE() {
+        return pitsa.path.join(pitsa.env('SCREENSHOT_DIFF_DIR'), 'VERIFY.html');
+      },
+      SCREENSHOT_DIFF_DIR: pitsa.functionize('screenshot_diffs'),
+      PITSA_SERVER_URL: pitsa.functionize('https://pitsa.herokuapp.com/'),
+    };
+    var choice = CHOICES[name];
+    if (choice === undefined) {
       throw new Error('Enviroment variable "' + name + '" is not defined.');
     }
+    return choice();
   },
 
   github: function github () {
