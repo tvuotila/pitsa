@@ -95,7 +95,7 @@ var pitsa = module.exports = {
         return pitsa.env('CIRCLE_PROJECT_USERNAME');
       },
       PROJECT_REPONAME: function PROJECT_REPONAME() {
-        return lambda(pitsa.env('CIRCLE_PROJECT_REPONAME'));
+        return pitsa.env('CIRCLE_PROJECT_REPONAME');
       },
       DEBUG: lambda(false),
       GITHUB_API_HOST: lambda('api.github.com'),
