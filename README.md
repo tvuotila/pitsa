@@ -72,7 +72,10 @@ We need to save your GitHub token and information about your pull request secure
 ## Optional enviroment variables:
 
 - DEBUG
-	- Set to `pitsa` or `*` to print debug logs.
+	- Set to `pitsa:*` or `*` to print all debug logs.
+	- `pitsa:main` prints logs only from functions in main execution pipeline.
+	- `pitsa:helper` prints logs only from functions not in main execution pipeline.
+	- See [debug](https://www.npmjs.com/package/debug) for more information.
 - SCREENSHOT_DIR
 	- Directory where screenshots will be saved
 	- Defaults to `screenshots`
