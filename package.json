@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/tvuotila/pitsa",
   "dependencies": {
-    "archiver": "^0.14.4",
+    "archiver": "^0.15.1",
     "async": "^1.0.0",
     "aws-sdk": "^2.1.26",
     "debug": "^2.2.0",
