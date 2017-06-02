@@ -1,5 +1,7 @@
 # Pitsa [![Build Status Images](https://travis-ci.org/tvuotila/pitsa.svg)](https://travis-ci.org/tvuotila/pitsa/) [![codecov.io](http://codecov.io/github/tvuotila/pitsa/coverage.svg?branch=master)](http://codecov.io/github/tvuotila/pitsa?branch=master) [![npm version](https://badge.fury.io/js/pitsa.svg)](http://badge.fury.io/js/pitsa) [![dependencies](https://david-dm.org/tvuotila/pitsa.svg)](https://david-dm.org/tvuotila/pitsa) [![devDependencies](https://david-dm.org/tvuotila/pitsa/dev-status.svg)](https://david-dm.org/tvuotila/pitsa#info=devDependencies)
 [![NPM](https://nodei.co/npm/pitsa.png)](https://nodei.co/npm/pitsa/)
+__Deprecated__: This package is deprecated. Better solitions exists. I personally recommend [Percy](https://percy.io/).
+
 Visual regression testing for Protractor (or Selenium) and CircleCI (or Travis CI) using Amazon S3. __Travis CI support is untested.__
 
 ## Installation
